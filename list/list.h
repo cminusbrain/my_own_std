@@ -3,10 +3,7 @@
 
 class List
 {
-
 public:
-
-
     using ElementType = int;
 
     struct Node
