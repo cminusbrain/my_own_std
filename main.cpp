@@ -1,11 +1,11 @@
 #include <iostream>
 #include <ctime>
-#include "vector.h"
+#include <vector/vector.h>
 
 int main()
 {
-    Vector<int> a;
-    srand(std::time(0));
+    Vector a;
+    srand(std::time(nullptr));
     for (int i = 0; i < 10; i++)
     {
         a.push_back(rand() % 10);
