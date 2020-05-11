@@ -1,6 +1,9 @@
 #pragma once
+#include <cstdint>
 #include <vector>
 #include <string>
+#include <iostream>
+#include <cstring>
 
 class File
 {
@@ -10,13 +13,13 @@ public:
 
     ~File();
 
-    int Open();
+    void Open();
 
     void Close();
 
-    std::vector<unsigned char> Read(int size);
+    std::vector<uint8_t> Read(size_t size);
 
-    void Write(const std::vector<unsigned char> &data);
+    void Write(const std::vector<uint8_t> &data);
 
 private:
 
@@ -24,3 +27,20 @@ private:
     std::string path;
 
 };
+
+template<typename T>
+File &operator<<(File &f, const T &value)
+{
+    std::vector<uint8_t> tmp(sizeof(T));
+    std::memcpy(tmp.data(), &value, sizeof(T));
+    f.Write(tmp);
+    return f;
+}
+
+template<typename T>
+File &operator>>(File &f, T &value)
+{
+    auto tmp = f.Read(sizeof(T));
+    std::memcpy(&value, tmp.data(), sizeof(T));
+    return f;
+}

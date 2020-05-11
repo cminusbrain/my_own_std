@@ -1,15 +1,12 @@
 #include <iostream>
-#include <ctime>
-#include <vector/vector.h>
+#include <file/file.h>
 
 int main()
 {
-    Vector a;
-    srand(std::time(nullptr));
-    for (int i = 0; i < 10; i++)
-    {
-        a.push_back(rand() % 10);
-    }
-    std::cout << a << a;
-    return 0;
+    File f("./test.txt");
+    double a = 5.1;
+    f << a;
+    double b;
+    f >> b;
+    std::cout << b;
 }
