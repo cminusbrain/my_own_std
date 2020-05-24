@@ -12,6 +12,18 @@ BaseSocket::BaseSocket(int fd) :
     socket_fd(fd)
 {}
 
+BaseSocket::BaseSocket(BaseSocket &&another) noexcept :
+    BaseSocket()
+{
+    swap(*this, another);
+}
+
+BaseSocket &BaseSocket::operator=(BaseSocket &&another) noexcept
+{
+    swap(*this, another);
+    return *this;
+}
+
 BaseSocket::~BaseSocket()
 {
     Close();

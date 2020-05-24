@@ -11,6 +11,18 @@ IoSocket::IoSocket(int fd) :
     BaseSocket(fd)
 {}
 
+IoSocket::IoSocket(IoSocket &&another) noexcept :
+    IoSocket()
+{
+    swap(*this, another);
+}
+
+IoSocket &IoSocket::operator=(IoSocket &&another) noexcept
+{
+    swap(*this, another);
+    return *this;
+}
+
 void IoSocket::Send(std::vector<uint8_t> data)
 {
     if(Native() == invalid_socket)

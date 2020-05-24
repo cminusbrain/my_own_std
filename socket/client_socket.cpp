@@ -16,6 +16,17 @@ ClientSocket::ClientSocket(const std::string &ip, uint16_t port) :
     address.sin_family = PF_INET;
 }
 
+ClientSocket::ClientSocket(ClientSocket &&another) noexcept
+{
+    swap(*this, another);
+}
+
+ClientSocket &ClientSocket::operator=(ClientSocket &&another) noexcept
+{
+    swap(*this, another);
+    return *this;
+}
+
 void ClientSocket::Connect()
 {
     if(Native() == invalid_socket)

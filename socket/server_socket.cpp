@@ -9,6 +9,18 @@ ServerSocket::ServerSocket(uint16_t port) :
     address.sin_family = PF_INET;
 }
 
+ServerSocket::ServerSocket(ServerSocket &&another) noexcept
+{
+    swap(*this, another);
+}
+
+ServerSocket &ServerSocket::operator=(ServerSocket &&another) noexcept
+{
+    swap(*this, another);
+    return *this;
+}
+
+
 void ServerSocket::Open()
 {
     if (bind(socket_.Native(), reinterpret_cast<sockaddr*>(&address), sizeof(address)) <  0)

@@ -13,6 +13,17 @@ public:
 
     explicit ServerSocket(uint16_t port);
 
+    ServerSocket(ServerSocket &&another) noexcept;
+
+    ServerSocket &operator=(ServerSocket &&another) noexcept;
+
+    friend void swap(ServerSocket &first, ServerSocket &second) noexcept
+    {
+        using std::swap;
+        swap(first.socket_, second.socket_);
+        swap(first.address, second.address);
+    }
+
     void Open();
 
     IoSocket Accept();
@@ -22,7 +33,7 @@ public:
 private:
 
     BaseSocket socket_;
-    sockaddr_in address;
+    sockaddr_in address{};
 
 };
 
