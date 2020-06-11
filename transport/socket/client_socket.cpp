@@ -1,7 +1,7 @@
-#include <socket/client_socket.h>
+#include <transport/socket/client_socket.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <socket/constants.h>
+#include <transport/socket/constants.h>
 #include <stdexcept>
 
 ClientSocket::ClientSocket() :

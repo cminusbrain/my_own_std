@@ -6,6 +6,13 @@ class BaseSocket : public NonCopyable
 {
 public:
 
+    enum SocketStatus
+    {
+        IncomingData,
+        NoData,
+        ConnectionLost
+    };
+
     BaseSocket();
 
     explicit BaseSocket(int fd);
@@ -19,6 +26,8 @@ public:
     void Close();
 
     int Native();
+
+    SocketStatus CheckForEvent();
 
     friend void swap(BaseSocket &first, BaseSocket &second) noexcept
     {

@@ -1,7 +1,7 @@
 #pragma once
-#include <socket/base_socket.h>
+#include <transport/socket/base_socket.h>
 #include <cstdint>
-#include <socket/io_socket.h>
+#include <transport/socket/io_socket.h>
 #include <netinet/in.h>
 #include <common/non_copyable.h>
 
@@ -28,7 +28,7 @@ public:
 
     IoSocket Accept();
 
-    void Close();
+    BaseSocket::SocketStatus CheckForEvent();
 
 private:
 
