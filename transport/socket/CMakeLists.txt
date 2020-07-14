@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(my_own_std_socket)
+project(socket)
 
 FILE(GLOB_RECURSE PROJ_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/*.h*)
 FILE(GLOB_RECURSE PROJ_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.c*)

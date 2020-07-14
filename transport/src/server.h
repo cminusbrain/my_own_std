@@ -2,6 +2,8 @@
 #include <transport/include/i_server.h>
 #include <transport/socket/server_socket.h>
 
+#include <map>
+
 class Server : public IServer
 {
 public:
@@ -16,11 +18,11 @@ public:
 
     void Send(ClientId id, const std::string &message) override;
 
-private:
-
     void WaitForConnectionRequest() override;
 
-private:
+    void AcceptClient() override;
 
+private:
+    std::map<ClientId, std::shared_ptr<IoSocket>> clients_;
     ServerSocket listener;
 };

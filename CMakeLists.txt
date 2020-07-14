@@ -8,6 +8,4 @@ add_subdirectory(vector)
 add_subdirectory(list)
 add_subdirectory(file)
 add_subdirectory(transport)
-
-add_executable(${PROJECT_NAME} main.cpp)
-target_link_libraries(${PROJECT_NAME} file)
+add_subdirectory(applications)

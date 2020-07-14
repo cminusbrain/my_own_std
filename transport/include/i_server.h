@@ -17,6 +17,8 @@ public:
 
     virtual void Send(ClientId id, const std::string &message) = 0;
 
+    virtual void AcceptClient() = 0;
+
     virtual void WaitForConnectionRequest() = 0;
 
 };

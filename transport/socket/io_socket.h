@@ -17,6 +17,7 @@ public:
 
     void Send(std::vector<uint8_t> data);
 
+
     std::vector<uint8_t> Receive(size_t size);
 
     friend void swap(IoSocket &first, IoSocket &second) noexcept
@@ -26,4 +27,4 @@ public:
     }
 
 };
-
+// Serializatsiya dannych / data serializing

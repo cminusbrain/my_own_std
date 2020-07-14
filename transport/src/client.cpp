@@ -21,6 +21,11 @@ void Client::ConnectToServer(const std::string &ip, uint16_t port)
     }
 }
 
+std::vector<uint8_t> Client::Receive(size_t size)
+{
+    return socket_.Receive(size);
+}
+
 std::shared_ptr<IClient> CreateClient()
 {
     return std::make_shared<Client>();

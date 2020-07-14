@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.0)
+project(client)
+
+FILE(GLOB_RECURSE PROJECT_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+FILE(GLOB_RECURSE PROJECT_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/*.h*)
+
+add_executable(${PROJECT_NAME} ${PROJECT_HEADERS} ${PROJECT_SOURCES})
+target_link_libraries(${PROJECT_NAME} transport socket)
