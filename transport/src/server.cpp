@@ -2,8 +2,9 @@
 #include <thread>
 #include <chrono>
 
-#include <transport/src/helpers.h>
 #include <iostream>
+
+#include <common/helpers.h>
 
 
 Server::Server(uint16_t port) :
@@ -13,6 +14,8 @@ Server::Server(uint16_t port) :
 void Server::Start()
 {
     listener.Open();
+
+    waitingThread_ = std::async(std::launch::async, &Server::WaitForConnectionRequest, this);
 }
 
 void Server::Stop()
@@ -48,6 +51,7 @@ void Server::WaitForConnectionRequest()
         std::this_thread::sleep_for(std::chrono::milliseconds (1000));
     }
     std::cout << "New client available!" << std::endl;
+    acceptionThread_ = std::async(std::launch::async, &Server::AcceptClient, this);
 }
 
 void Server::AcceptClient()
@@ -59,6 +63,8 @@ void Server::AcceptClient()
     clients_.emplace(id, socket);
 
     Send(id, std::to_string(id));
+
+    waitingThread_ = std::async(std::launch::async, &Server::WaitForConnectionRequest, this);
 }
 
 std::shared_ptr<IServer> CreateServer(uint16_t port)

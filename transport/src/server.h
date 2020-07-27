@@ -3,6 +3,7 @@
 #include <transport/socket/server_socket.h>
 
 #include <map>
+#include <future>
 
 class Server : public IServer
 {
@@ -25,4 +26,7 @@ public:
 private:
     std::map<ClientId, std::shared_ptr<IoSocket>> clients_;
     ServerSocket listener;
+
+    std::future<void> waitingThread_;
+    std::future<void> acceptionThread_;
 };
