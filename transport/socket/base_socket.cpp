@@ -69,3 +69,13 @@ BaseSocket::SocketStatus BaseSocket::CheckForEvent()
         }
     }
 }
+
+void BaseSocket::SetReuseOption(bool optionValue)
+{
+    int flag = static_cast<int>(optionValue);
+
+    if(0 > setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &flag, sizeof(flag)))
+    {
+        throw std::runtime_error("Setting reuse option failed.");
+    }
+}

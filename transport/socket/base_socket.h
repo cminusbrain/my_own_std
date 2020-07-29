@@ -29,6 +29,8 @@ public:
 
     SocketStatus CheckForEvent();
 
+    void SetReuseOption(bool optionValue);
+
     friend void swap(BaseSocket &first, BaseSocket &second) noexcept
     {
         using std::swap;

@@ -3,7 +3,7 @@
 #include <transport/include/i_client.h>
 #include <transport/include/constants.h>
 
-#include <transport/include/helpers.h>
+#include <common/helpers.h>
 
 int main()
 {

@@ -1,7 +1,5 @@
 #include <transport/include/i_server.h>
 #include <transport/include/constants.h>
-#include <common/helpers.h>
-#include <transport/src/server.h>
 #include <iostream>
 
 int main()

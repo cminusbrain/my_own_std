@@ -8,6 +8,8 @@ ServerSocket::ServerSocket(uint16_t port) :
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(port);
     address.sin_family = PF_INET;
+
+    socket_.SetReuseOption(true);
 }
 
 ServerSocket::ServerSocket(ServerSocket &&another) noexcept
