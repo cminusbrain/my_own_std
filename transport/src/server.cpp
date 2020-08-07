@@ -3,6 +3,7 @@
 #include <chrono>
 
 #include <iostream>
+#include <algorithm>
 
 #include <common/helpers.h>
 
@@ -11,8 +12,15 @@ Server::Server(uint16_t port) :
     listener(port)
 {}
 
+Server::~Server()
+{
+    Stop();
+}
+
 void Server::Start()
 {
+    pollingThread_ = std::async(std::launch::async, &Server::StartSocketPolling, this);
+
     listener.Open();
 
     waitingThread_ = std::async(std::launch::async, &Server::WaitForConnectionRequest, this);
@@ -20,7 +28,7 @@ void Server::Start()
 
 void Server::Stop()
 {
-
+    stop_ = true;
 }
 
 void Server::Restart()
@@ -47,7 +55,7 @@ void Server::WaitForConnectionRequest()
 {
     while(listener.CheckForEvent() != BaseSocket::IncomingData)
     {
-        std::cout << "Waiting for client..." << std::endl;
+        //std::cout << "Waiting for client..." << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds (1000));
     }
     std::cout << "New client available!" << std::endl;
@@ -65,6 +73,43 @@ void Server::AcceptClient()
     Send(id, std::to_string(id));
 
     waitingThread_ = std::async(std::launch::async, &Server::WaitForConnectionRequest, this);
+}
+
+void Server::StartSocketPolling()
+{
+    while(!stop_)
+    {
+        for(auto elem = clients_.begin(); elem != clients_.end(); elem++)
+        {
+            switch (elem->second->CheckForEvent())
+            {
+                case BaseSocket::SocketStatus::IncomingData:
+                    AcceptMessage(elem->first);
+                    break;
+                case BaseSocket::SocketStatus::NoData:
+                    continue;
+                case BaseSocket::SocketStatus::ConnectionLost:
+                    std::cout << "Client [" << elem->first << "] disconnected" << std::endl;
+                    clients_.erase(elem);
+                    break;
+                default:
+                    throw std::logic_error("Unknown socket status");
+            }
+        }
+    }
+}
+
+void Server::AcceptMessage(ClientId id)
+{
+    size_t binaryMessageSize = ConvertFromBytes<size_t>(clients_[id]->Receive(sizeof(size_t)));
+    auto binaryMessage = clients_[id]->Receive(binaryMessageSize);
+
+    std::cout << "[" << id << "]: ";
+    for(auto byte : binaryMessage)
+    {
+        std::cout << std::hex << static_cast<uint32_t>(byte) <<  ' ';
+    }
+    std::cout << std::dec << std::endl;
 }
 
 std::shared_ptr<IServer> CreateServer(uint16_t port)

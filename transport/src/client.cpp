@@ -1,9 +1,17 @@
 #include <transport/src/client.h>
 #include <iostream>
+#include <common/helpers.h>
 
-void Client::Send(ClientId id, const std::string &message)
+void Client::Send(const std::string &message)
 {
+    std::vector<uint8_t> dataToSend;
+    auto serializedSize = ConvertToBytes(message.size());
+    auto serializedData = ConvertToBytes(message);
 
+    dataToSend.insert(dataToSend.end(), serializedSize.begin(), serializedSize.end());
+    dataToSend.insert(dataToSend.end(), serializedData.begin(), serializedData.end());
+
+    socket_.Send(dataToSend);
 }
 
 void Client::ConnectToServer(const std::string &ip, uint16_t port)

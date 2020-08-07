@@ -11,6 +11,8 @@ public:
 
     explicit Server(uint16_t port);
 
+    ~Server();
+
     void Start() override;
 
     void Stop() override;
@@ -24,9 +26,18 @@ public:
     void AcceptClient() override;
 
 private:
+
+    void StartSocketPolling();
+
+    void AcceptMessage(ClientId id);
+
+private:
     std::map<ClientId, std::shared_ptr<IoSocket>> clients_;
     ServerSocket listener;
 
     std::future<void> waitingThread_;
     std::future<void> acceptionThread_;
+    std::future<void> pollingThread_;
+
+    bool stop_ = false;
 };

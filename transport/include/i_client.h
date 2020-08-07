@@ -10,7 +10,7 @@ class IClient
 {
 public:
 
-    virtual void Send(ClientId id, const std::string &message) = 0;
+    virtual void Send(const std::string &message) = 0;
 
     virtual std::vector<uint8_t> Receive(size_t size) = 0;
 

@@ -5,6 +5,8 @@
 #include <transport/socket/constants.h>
 #include <stdexcept>
 
+#include <iostream>
+
 BaseSocket::BaseSocket() :
     socket_fd(invalid_socket)
 {}
@@ -54,13 +56,13 @@ BaseSocket::SocketStatus BaseSocket::CheckForEvent()
         }
         case 1:
         {
-            if(fds.revents & POLLIN != 0)
-            {
-                return SocketStatus::IncomingData;
-            }
             if (fds.revents & POLLHUP != 0)
             {
                 return SocketStatus::ConnectionLost;
+            }
+            if (fds.revents & POLLIN != 0)
+            {
+                return SocketStatus::IncomingData;
             }
         }
         default:
