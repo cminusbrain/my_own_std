@@ -1,5 +1,6 @@
-#include <socket/server_socket.h>
+#include <transport/socket/server_socket.h>
 #include <stdexcept>
+#include <poll.h>
 
 ServerSocket::ServerSocket(uint16_t port) :
     socket_(socket(PF_INET, SOCK_STREAM, IPPROTO_TCP))
@@ -7,6 +8,8 @@ ServerSocket::ServerSocket(uint16_t port) :
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(port);
     address.sin_family = PF_INET;
+
+    socket_.SetReuseOption(true);
 }
 
 ServerSocket::ServerSocket(ServerSocket &&another) noexcept
@@ -20,14 +23,13 @@ ServerSocket &ServerSocket::operator=(ServerSocket &&another) noexcept
     return *this;
 }
 
-
 void ServerSocket::Open()
 {
     if (bind(socket_.Native(), reinterpret_cast<sockaddr*>(&address), sizeof(address)) <  0)
     {
         throw std::runtime_error("bind failed");
     }
-    if  (listen(socket_.Native(), 1) < 0)
+    if (listen(socket_.Native(), 1) < 0)
     {
         throw std::runtime_error("listen failed");
     }
@@ -38,7 +40,7 @@ IoSocket ServerSocket::Accept()
     return IoSocket(accept(socket_.Native(), nullptr, nullptr));
 }
 
-void ServerSocket::Close()
+BaseSocket::SocketStatus ServerSocket::CheckForEvent()
 {
-    socket_.Close();
+    return socket_.CheckForEvent();
 }
